@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calculez votre potentiel de fidélisation — Éclat Loyalty</title>
+<style>
+:root{
+  --color-text-primary:#111827;
+  --color-text-secondary:#6b7280;
+  --color-text-tertiary:#9ca3af;
+  --color-border-secondary:#d1d5db;
+  --color-border-tertiary:#e5e7eb;
+  --color-background-primary:#ffffff;
+  --color-background-secondary:#f9fafb;
+  --border-radius-md:8px;
+  --border-radius-lg:14px;
+  --font-sans:-apple-system,"Inter",ui-sans-serif,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--color-background-secondary);color:var(--color-text-primary)}
+.page{max-width:640px;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+.brand{font-size:15px;font-weight:700;color:#4f46e5;margin-bottom:1.5rem}
+.wrap{background:var(--color-background-primary);border-radius:var(--border-radius-lg);padding:2rem;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.header{margin-bottom:2rem}
+.header h2{font-size:20px;font-weight:600;color:var(--color-text-primary);margin-bottom:6px}
+.header p{font-size:14px;color:var(--color-text-secondary);line-height:1.5}
+.section{margin-bottom:2rem}
+.section-title{font-size:13px;font-weight:600;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--color-border-tertiary)}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:14px;color:var(--color-text-primary);margin-bottom:6px;font-weight:500}
+.field label span{font-weight:400;color:var(--color-text-secondary);margin-left:4px;font-size:13px}
+.field input,.field select,.field textarea{width:100%;font-size:14px;border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px 12px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:inherit}
+.field textarea{resize:vertical;min-height:72px;line-height:1.5}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.radio-group{display:flex;flex-wrap:wrap;gap:8px}
+.radio-pill input{display:none}
+.radio-pill label{display:inline-block;padding:7px 14px;border:1px solid var(--color-border-secondary);border-radius:99px;font-size:13px;cursor:pointer;color:var(--color-text-secondary);transition:all .15s}
+.radio-pill input:checked+label{background:#EEEDFE;border-color:#7F77DD;color:#3C3489}
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:1rem}
+.score-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;text-align:center}
+.score-card .score-val{font-size:26px;font-weight:700;color:var(--color-text-primary)}
+.score-card .score-label{font-size:12px;color:var(--color-text-secondary);margin-top:4px}
+.score-card .score-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.insight-box{background:#EEEDFE;border:1px solid #AFA9EC;border-radius:var(--border-radius-md);padding:1rem 1.25rem;margin-top:1rem}
+.insight-box p{font-size:14px;color:#3C3489;line-height:1.6}
+.insight-box strong{font-weight:600}
+.cta-area{margin-top:2rem;background:#E1F5EE;border:1px solid #5DCAA5;border-radius:var(--border-radius-lg);padding:1.5rem;text-align:center}
+.cta-area h3{font-size:17px;font-weight:600;color:#085041;margin-bottom:6px}
+.cta-area p{font-size:13px;color:#0F6E56;margin-bottom:1rem}
+.btn-cta{display:inline-block;background:#1D9E75;color:#fff;border:none;border-radius:var(--border-radius-md);padding:11px 26px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn-cta:hover{background:#0F6E56}
+.progress-bar{height:4px;background:var(--color-background-secondary);border-radius:99px;margin-bottom:2rem;overflow:hidden}
+.progress-fill{height:100%;background:#1D9E75;border-radius:99px;transition:width .3s}
+</style>
+</head>
+<body>
+<div class="page">
+  <p class="brand">✦ Éclat Loyalty</p>
+  <div class="wrap">
+
+    <div class="header">
+      <h2>Mon plan de fidélisation client</h2>
+      <p>Remplis ce template pour découvrir le potentiel de fidélisation de ton commerce — et ce que tu perds chaque mois.</p>
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+
+    <div class="section">
+      <div class="section-title">1. Ton commerce</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Type de commerce <span>*</span></label>
+          <select id="type_commerce" onchange="update()">
+            <option value="">-- Choisir --</option>
+            <option>Institut de beauté / Nail tech</option>
+            <option>Salon de coiffure</option>
+            <option>Boutique mode / accessoires</option>
+            <option>Restaurant / café</option>
+            <option>Bien-être / spa</option>
+            <option>Autre commerce local</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Clients par mois <span>*</span></label>
+          <input type="number" id="clients_mois" placeholder="ex: 80" min="1" oninput="update()">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Panier moyen (€) <span>*</span></label>
+          <input type="number" id="panier" placeholder="ex: 45" min="1" oninput="update()">
+        </div>
+        <div class="field">
+          <label>Fréquence de retour estimée</label>
+          <select id="freq" onchange="update()">
+            <option value="">-- Choisir --</option>
+            <option value="2">1 fois tous les 2 mois</option>
+            <option value="1.5">1 fois par mois et demi</option>
+            <option value="1">1 fois par mois</option>
+            <option value="0.5">2 fois par mois</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">2. Ta situation actuelle</div>
+      <div class="field">
+        <label>As-tu un programme de fidélité aujourd'hui ?</label>
+        <div class="radio-group">
+          <div class="radio-pill"><input type="radio" name="fidelite" id="f1" value="non" onchange="update()"><label for="f1">Non, aucun</label></div>
+          <div class="radio-pill"><input type="radio" name="fidelite" id="f2" value="carte_papier" onchange="update()"><label for="f2">Carte papier tampon</label></div>
+          <div class="radio-pill"><input type="radio" name="fidelite" id="f3" value="logiciel" onchange="update()"><label for="f3">Logiciel/app existant</label></div>
+          <div class="radio-pill"><input type="radio" name="fidelite" id="f4" value="autre" onchange="update()"><label for="f4">Autre système</label></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Connais-tu le % de clients qui reviennent ? <span>(estimation)</span></label>
+        <div class="radio-group">
+          <div class="radio-pill"><input type="radio" name="retention" id="r1" value="20" onchange="update()"><label for="r1">Moins de 20%</label></div>
+          <div class="radio-pill"><input type="radio" name="retention" id="r2" value="35" onchange="update()"><label for="r2">20–40%</label></div>
+          <div class="radio-pill"><input type="radio" name="retention" id="r3" value="55" onchange="update()"><label for="r3">40–60%</label></div>
+          <div class="radio-pill"><input type="radio" name="retention" id="r4" value="70" onchange="update()"><label for="r4">Plus de 60%</label></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Principal obstacle à fidéliser tes clients <span>(optionnel)</span></label>
+        <textarea id="obstacle" placeholder="Ex: les clients oublient de revenir, je n'ai pas le temps de les relancer, je ne sais pas qui sont mes meilleurs clients..." oninput="update()"></textarea>
+      </div>
+    </div>
+
+    <div class="section" id="results-section" style="display:none">
+      <div class="section-title">3. Ton potentiel de fidélisation</div>
+      <div class="score-grid">
+        <div class="score-card">
+          <div class="score-val" id="ca-actuel">–</div>
+          <div class="score-label">CA mensuel actuel</div>
+          <div class="score-sub">estimé</div>
+        </div>
+        <div class="score-card">
+          <div class="score-val" id="clients-perdus">–</div>
+          <div class="score-label">Clients perdus/mois</div>
+          <div class="score-sub">qui ne reviennent pas</div>
+        </div>
+        <div class="score-card">
+          <div class="score-val" id="manque-a-gagner">–</div>
+          <div class="score-label">Manque à gagner</div>
+          <div class="score-sub">par mois</div>
+        </div>
+        <div class="score-card">
+          <div class="score-val" id="gain-potentiel">–</div>
+          <div class="score-label">Gain potentiel</div>
+          <div class="score-sub">avec +20% rétention</div>
+        </div>
+      </div>
+      <div class="insight-box" id="insight-box">
+        <p id="insight-text"></p>
+      </div>
+    </div>
+
+    <div class="cta-area" id="cta-area" style="display:none">
+      <h3>Tu as le potentiel — il manque juste le bon outil</h3>
+      <p>Éclat Loyalty t'aide à automatiser la fidélisation sans effort, directement sur le téléphone de tes clients.</p>
+      <a class="btn-cta" id="cta-link" href="https://app.xn--clatdigital-99a.fr/register">Découvrir Éclat Loyalty →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function fmt(n){return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n)}
+function update(){
+  const clients=parseInt(document.getElementById('clients_mois').value)||0;
+  const panier=parseInt(document.getElementById('panier').value)||0;
+  const freqEl=document.getElementById('freq');
+  const freq=freqEl.value?parseFloat(freqEl.value):1;
+  const retEl=document.querySelector('input[name="retention"]:checked');
+  const ret=retEl?parseInt(retEl.value):null;
+
+  let filled=0;
+  if(document.getElementById('type_commerce').value)filled+=20;
+  if(clients>0)filled+=20;
+  if(panier>0)filled+=20;
+  if(retEl)filled+=20;
+  if(document.querySelector('input[name="fidelite"]:checked'))filled+=20;
+  document.getElementById('progress').style.width=filled+'%';
+
+  if(clients>0&&panier>0&&ret!==null){
+    const caActuel=clients*panier;
+    const clientsFideles=Math.round(clients*(ret/100));
+    const clientsPerdus=clients-clientsFideles;
+    const manque=Math.round(clientsPerdus*panier*freq);
+    const gainPotentiel=Math.round(clients*0.2*panier*freq);
+
+    document.getElementById('ca-actuel').textContent=fmt(caActuel);
+    document.getElementById('clients-perdus').textContent=clientsPerdus;
+    document.getElementById('manque-a-gagner').textContent=fmt(manque);
+    document.getElementById('gain-potentiel').textContent=fmt(gainPotentiel);
+
+    let insight='';
+    if(ret<=20){
+      insight=`<strong>Situation critique :</strong> tu perds ${clientsPerdus} clients chaque mois. Avec un taux de rétention aussi bas, chaque nouveau client coûte cher à acquérir. Un programme de fidélité bien structuré peut doubler ton taux de retour en 3 mois.`;
+    }else if(ret<=35){
+      insight=`<strong>Marge de progression importante :</strong> ${clientsPerdus} clients ne reviennent pas chaque mois, soit ${fmt(manque)} de CA que tu ne feras jamais. La bonne nouvelle : avec les bons outils, passer à 50% de rétention est tout à fait réaliste.`;
+    }else if(ret<=55){
+      insight=`<strong>Base solide, mais encore ${clientsPerdus} clients perdus par mois.</strong> Tu es au-dessus de la moyenne — mais ${fmt(manque)}/mois restent sur la table. Un programme digital automatisé peut transformer ces occasions manquées en rendez-vous récurrents.`;
+    }else{
+      insight=`<strong>Tu fidélises déjà bien !</strong> Mais même à ce niveau, ${clientsPerdus} clients partent chaque mois. Automatiser et digitaliser ce process te permettra de gagner ${fmt(gainPotentiel)} de plus sans effort supplémentaire.`;
+    }
+    document.getElementById('insight-text').innerHTML=insight;
+    document.getElementById('results-section').style.display='block';
+    document.getElementById('cta-area').style.display='block';
+  }else{
+    document.getElementById('results-section').style.display='none';
+    document.getElementById('cta-area').style.display='none';
+  }
+}
+</script>
+</body>
+</html>
