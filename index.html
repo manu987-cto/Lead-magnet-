@@ -200,6 +200,7 @@ body{font-family:var(--font-sans);background:var(--color-background-secondary);c
 
 <script>
 function fmt(n){return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n)}
+let lastResults=null;
 function update(){
   const clients=parseInt(document.getElementById('clients_mois').value)||0;
   const panier=parseInt(document.getElementById('panier').value)||0;
@@ -242,10 +243,19 @@ function update(){
     document.getElementById('results-section').style.display='block';
     document.getElementById('lead-capture-area').style.display='block';
     document.getElementById('cta-area').style.display='block';
+
+    lastResults={
+      ca_actuel:caActuel,
+      clients_perdus:clientsPerdus,
+      manque_a_gagner:manque,
+      gain_potentiel:gainPotentiel,
+      retention_pct:ret
+    };
   }else{
     document.getElementById('results-section').style.display='none';
     document.getElementById('lead-capture-area').style.display='none';
     document.getElementById('cta-area').style.display='none';
+    lastResults=null;
   }
 }
 
@@ -273,7 +283,8 @@ function submitLead(){
       email,
       phone,
       business_type:document.getElementById('type_commerce').value,
-      source:'lead-magnet-diagnostic'
+      source:'lead-magnet-diagnostic',
+      results:lastResults
     })
   })
     .then(r=>{
@@ -288,5 +299,6 @@ function submitLead(){
     });
 }
 </script>
+
 </body>
 </html>
