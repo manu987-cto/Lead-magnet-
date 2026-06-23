@@ -45,6 +45,15 @@ body{font-family:var(--font-sans);background:var(--color-background-secondary);c
 .insight-box{background:#EEEDFE;border:1px solid #AFA9EC;border-radius:var(--border-radius-md);padding:1rem 1.25rem;margin-top:1rem}
 .insight-box p{font-size:14px;color:#3C3489;line-height:1.6}
 .insight-box strong{font-weight:600}
+.lead-capture{margin-top:2rem;background:#EEEDFE;border:1px solid #AFA9EC;border-radius:var(--border-radius-lg);padding:1.5rem;text-align:center}
+.lead-capture h3{font-size:16px;font-weight:600;color:#3C3489;margin-bottom:6px}
+.lead-capture p{font-size:13px;color:#3C3489;margin-bottom:1rem}
+.lead-fields{display:flex;flex-direction:column;gap:8px;margin-bottom:.75rem}
+.lead-fields input{font-size:14px;border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px 12px;font-family:inherit}
+.btn-lead{display:inline-block;width:100%;background:#7e14ff;color:#fff;border:none;border-radius:var(--border-radius-md);padding:11px 26px;font-size:14px;font-weight:600;cursor:pointer}
+.btn-lead:hover{background:#6710d1}
+.btn-lead:disabled{opacity:.6;cursor:default}
+#lead-status{margin-top:.5rem;font-size:13px;color:#3C3489}
 .cta-area{margin-top:2rem;background:#E1F5EE;border:1px solid #5DCAA5;border-radius:var(--border-radius-lg);padding:1.5rem;text-align:center}
 .cta-area h3{font-size:17px;font-weight:600;color:#085041;margin-bottom:6px}
 .cta-area p{font-size:13px;color:#0F6E56;margin-bottom:1rem}
@@ -170,6 +179,17 @@ body{font-family:var(--font-sans);background:var(--color-background-secondary);c
       </div>
     </div>
 
+    <div class="lead-capture" id="lead-capture-area" style="display:none">
+      <h3>Reçois ton diagnostic détaillé</h3>
+      <p>On t'envoie une copie de ces résultats par email, avec des conseils personnalisés pour ton commerce.</p>
+      <div class="lead-fields">
+        <input type="email" id="lead-email" placeholder="ton@email.com" required>
+        <input type="tel" id="lead-phone" placeholder="Téléphone (optionnel)">
+      </div>
+      <button class="btn-lead" id="lead-submit" onclick="submitLead()">Recevoir mon diagnostic</button>
+      <p id="lead-status"></p>
+    </div>
+
     <div class="cta-area" id="cta-area" style="display:none">
       <h3>Tu as le potentiel — il manque juste le bon outil</h3>
       <p>Éclat Loyalty t'aide à automatiser la fidélisation sans effort, directement sur le téléphone de tes clients.</p>
@@ -220,11 +240,52 @@ function update(){
     }
     document.getElementById('insight-text').innerHTML=insight;
     document.getElementById('results-section').style.display='block';
+    document.getElementById('lead-capture-area').style.display='block';
     document.getElementById('cta-area').style.display='block';
   }else{
     document.getElementById('results-section').style.display='none';
+    document.getElementById('lead-capture-area').style.display='none';
     document.getElementById('cta-area').style.display='none';
   }
+}
+
+const API_URL='https://api.xn--clatdigital-99a.fr/api/leads';
+
+function submitLead(){
+  const email=document.getElementById('lead-email').value.trim();
+  const phone=document.getElementById('lead-phone').value.trim();
+  const statusEl=document.getElementById('lead-status');
+  const btn=document.getElementById('lead-submit');
+
+  if(!email||!email.includes('@')){
+    statusEl.textContent='Merci de renseigner un email valide.';
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent='Envoi...';
+  statusEl.textContent='';
+
+  fetch(API_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      email,
+      phone,
+      business_type:document.getElementById('type_commerce').value,
+      source:'lead-magnet-diagnostic'
+    })
+  })
+    .then(r=>{
+      if(!r.ok) throw new Error();
+      statusEl.textContent='Merci ! Tu vas recevoir ton diagnostic par email.';
+      btn.textContent='Envoyé ✓';
+    })
+    .catch(()=>{
+      statusEl.textContent="Erreur lors de l'envoi, réessaie dans un instant.";
+      btn.disabled=false;
+      btn.textContent='Recevoir mon diagnostic';
+    });
 }
 </script>
 </body>
