@@ -183,6 +183,8 @@ body{font-family:var(--font-sans);background:var(--color-background-secondary);c
       <h3>Reçois ton diagnostic détaillé</h3>
       <p>On t'envoie une copie de ces résultats par email, avec des conseils personnalisés pour ton commerce.</p>
       <div class="lead-fields">
+        <input type="text" id="lead-firstname" placeholder="Prénom">
+        <input type="text" id="lead-lastname" placeholder="Nom">
         <input type="email" id="lead-email" placeholder="ton@email.com" required>
         <input type="tel" id="lead-phone" placeholder="Téléphone (optionnel)">
       </div>
@@ -262,6 +264,8 @@ function update(){
 const API_URL='https://api.xn--clatdigital-99a.fr/api/leads';
 
 function submitLead(){
+  const firstName=document.getElementById('lead-firstname').value.trim();
+  const lastName=document.getElementById('lead-lastname').value.trim();
   const email=document.getElementById('lead-email').value.trim();
   const phone=document.getElementById('lead-phone').value.trim();
   const statusEl=document.getElementById('lead-status');
@@ -280,6 +284,8 @@ function submitLead(){
     method:'POST',
     headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
+      first_name:firstName,
+      last_name:lastName,
       email,
       phone,
       business_type:document.getElementById('type_commerce').value,
