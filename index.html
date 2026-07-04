@@ -95,11 +95,13 @@ body{font-family:var(--font-sans);background:var(--color-background-secondary);c
             <option value="">-- Choisir --</option>
             <option>Institut de beauté / Nail tech</option>
             <option>Salon de coiffure</option>
+            <option>Boulangerie / pâtisserie</option>
             <option>Boutique mode / accessoires</option>
             <option>Restaurant / café</option>
             <option>Bien-être / spa</option>
             <option>Autre commerce local</option>
           </select>
+          <input type="text" id="type_commerce_autre" placeholder="Quel est ton commerce ?" style="display:none;margin-top:8px" oninput="update()">
         </div>
         <div class="field">
           <label>Clients par mois <span>*</span></label>
@@ -119,7 +121,9 @@ body{font-family:var(--font-sans);background:var(--color-background-secondary);c
             <option value="1.5">1 fois par mois et demi</option>
             <option value="1">1 fois par mois</option>
             <option value="0.5">2 fois par mois</option>
+            <option value="autre">Autre</option>
           </select>
+          <input type="number" id="freq_autre" placeholder="Combien de fois par mois ? ex: 3" min="0.1" step="0.5" style="display:none;margin-top:8px" oninput="update()">
         </div>
       </div>
     </div>
@@ -193,9 +197,9 @@ body{font-family:var(--font-sans);background:var(--color-background-secondary);c
     </div>
 
     <div class="cta-area" id="cta-area" style="display:none">
-      <h3>Tu as le potentiel — il manque juste le bon outil</h3>
-      <p>Éclat Loyalty t'aide à automatiser la fidélisation sans effort, directement sur le téléphone de tes clients.</p>
-      <a class="btn-cta" id="cta-link" href="https://xn--clatdigital-99a.fr/">Découvrir Éclat Loyalty →</a>
+      <h3>Tu n'as pas à gérer ça tout seul</h3>
+      <p>Faire revenir tes clients, c'est exactement ce pour quoi Éclat Loyalty a été pensé. Prends 14 jours pour l'essayer tranquillement — c'est gratuit, sans engagement, et tu verras par toi-même si ça te soulage au quotidien.</p>
+      <a class="btn-cta" id="cta-link" href="https://xn--clatdigital-99a.fr/">Voir comment ça peut m'aider →</a>
     </div>
   </div>
 </div>
@@ -206,8 +210,24 @@ let lastResults=null;
 function update(){
   const clients=parseInt(document.getElementById('clients_mois').value)||0;
   const panier=parseInt(document.getElementById('panier').value)||0;
+
+  const typeEl=document.getElementById('type_commerce');
+  const typeAutreEl=document.getElementById('type_commerce_autre');
+  typeAutreEl.style.display=typeEl.value==='Autre commerce local'?'block':'none';
+
+  // "Autre" : saisie du nombre de visites par mois, convertie en intervalle
+  // entre deux visites (même unité que les presets du select)
   const freqEl=document.getElementById('freq');
-  const freq=freqEl.value?parseFloat(freqEl.value):1;
+  const freqAutreEl=document.getElementById('freq_autre');
+  freqAutreEl.style.display=freqEl.value==='autre'?'block':'none';
+  let freq=1;
+  if(freqEl.value==='autre'){
+    const visites=parseFloat(String(freqAutreEl.value).replace(',','.'));
+    freq=visites>0?1/visites:1;
+  }else if(freqEl.value){
+    freq=parseFloat(freqEl.value);
+  }
+
   const retEl=document.querySelector('input[name="retention"]:checked');
   const ret=retEl?parseInt(retEl.value):null;
 
@@ -288,7 +308,11 @@ function submitLead(){
       last_name:lastName,
       email,
       phone,
-      business_type:document.getElementById('type_commerce').value,
+      business_type:(function(){
+        const t=document.getElementById('type_commerce').value;
+        const a=document.getElementById('type_commerce_autre').value.trim();
+        return t==='Autre commerce local'&&a?'Autre : '+a:t;
+      })(),
       source:'lead-magnet-diagnostic',
       results:lastResults
     })
