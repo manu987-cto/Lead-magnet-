@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Calculez votre potentiel de fidélisation — Éclat Loyalty</title>
+<title>Calculez votre potentiel de fidélisation | Éclat Loyalty</title>
 <style>
 :root{
   --color-text-primary:#111827;
@@ -81,7 +81,7 @@ body{font-family:var(--font-sans);background:var(--color-background-secondary);c
 
     <div class="header">
       <h2>Mon plan de fidélisation client</h2>
-      <p>Remplis ce template pour découvrir le potentiel de fidélisation de ton commerce — et ce que tu perds chaque mois.</p>
+      <p>Remplis ce template pour découvrir le potentiel de fidélisation de ton commerce et ce que tu perds chaque mois.</p>
     </div>
 
     <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
@@ -198,7 +198,7 @@ body{font-family:var(--font-sans);background:var(--color-background-secondary);c
 
     <div class="cta-area" id="cta-area" style="display:none">
       <h3>Tu n'as pas à gérer ça tout seul</h3>
-      <p>Faire revenir tes clients, c'est exactement ce pour quoi Éclat Loyalty a été pensé. Prends 14 jours pour l'essayer tranquillement — c'est gratuit, sans engagement, et tu verras par toi-même si ça te soulage au quotidien.</p>
+      <p>Faire revenir tes clients, c'est exactement ce pour quoi Éclat Loyalty a été pensé. Prends 14 jours pour l'essayer tranquillement : c'est gratuit, sans engagement, et tu verras par toi-même si ça te soulage au quotidien.</p>
       <a class="btn-cta" id="cta-link" href="https://xn--clatdigital-99a.fr/">Voir comment ça peut m'aider →</a>
     </div>
   </div>
@@ -257,7 +257,7 @@ function update(){
     }else if(ret<=35){
       insight=`<strong>Marge de progression importante :</strong> ${clientsPerdus} clients ne reviennent pas chaque mois, soit ${fmt(manque)} de CA que tu ne feras jamais. La bonne nouvelle : avec les bons outils, passer à 50% de rétention est tout à fait réaliste.`;
     }else if(ret<=55){
-      insight=`<strong>Base solide, mais encore ${clientsPerdus} clients perdus par mois.</strong> Tu es au-dessus de la moyenne — mais ${fmt(manque)}/mois restent sur la table. Un programme digital automatisé peut transformer ces occasions manquées en rendez-vous récurrents.`;
+      insight=`<strong>Base solide, mais encore ${clientsPerdus} clients perdus par mois.</strong> Tu es au-dessus de la moyenne, mais ${fmt(manque)}/mois restent sur la table. Un programme digital automatisé peut transformer ces occasions manquées en rendez-vous récurrents.`;
     }else{
       insight=`<strong>Tu fidélises déjà bien !</strong> Mais même à ce niveau, ${clientsPerdus} clients partent chaque mois. Automatiser et digitaliser ce process te permettra de gagner ${fmt(gainPotentiel)} de plus sans effort supplémentaire.`;
     }
