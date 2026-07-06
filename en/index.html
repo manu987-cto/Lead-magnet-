@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calculate your loyalty potential | Éclat Loyalty</title>
+<style>
+:root{
+  --color-text-primary:#111827;
+  --color-text-secondary:#6b7280;
+  --color-text-tertiary:#9ca3af;
+  --color-border-secondary:#d1d5db;
+  --color-border-tertiary:#e5e7eb;
+  --color-background-primary:#ffffff;
+  --color-background-secondary:#f9fafb;
+  --border-radius-md:8px;
+  --border-radius-lg:14px;
+  --font-sans:-apple-system,"Inter",ui-sans-serif,system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--color-background-secondary);color:var(--color-text-primary)}
+.page{max-width:640px;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+.brand{font-size:15px;font-weight:700;color:#4f46e5;margin-bottom:1.5rem}
+.wrap{background:var(--color-background-primary);border-radius:var(--border-radius-lg);padding:2rem;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.header{margin-bottom:2rem}
+.header h2{font-size:20px;font-weight:600;color:var(--color-text-primary);margin-bottom:6px}
+.header p{font-size:14px;color:var(--color-text-secondary);line-height:1.5}
+.section{margin-bottom:2rem}
+.section-title{font-size:13px;font-weight:600;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.75rem;padding-bottom:.5rem;border-bottom:1px solid var(--color-border-tertiary)}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:14px;color:var(--color-text-primary);margin-bottom:6px;font-weight:500}
+.field label span{font-weight:400;color:var(--color-text-secondary);margin-left:4px;font-size:13px}
+.field input,.field select,.field textarea{width:100%;font-size:14px;border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px 12px;background:var(--color-background-primary);color:var(--color-text-primary);font-family:inherit}
+.field textarea{resize:vertical;min-height:72px;line-height:1.5}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.radio-group{display:flex;flex-wrap:wrap;gap:8px}
+.radio-pill input{display:none}
+.radio-pill label{display:inline-block;padding:7px 14px;border:1px solid var(--color-border-secondary);border-radius:99px;font-size:13px;cursor:pointer;color:var(--color-text-secondary);transition:all .15s}
+.radio-pill input:checked+label{background:#EEEDFE;border-color:#7F77DD;color:#3C3489}
+.score-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:1rem}
+.score-card{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:1rem;text-align:center}
+.score-card .score-val{font-size:26px;font-weight:700;color:var(--color-text-primary)}
+.score-card .score-label{font-size:12px;color:var(--color-text-secondary);margin-top:4px}
+.score-card .score-sub{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.insight-box{background:#EEEDFE;border:1px solid #AFA9EC;border-radius:var(--border-radius-md);padding:1rem 1.25rem;margin-top:1rem}
+.insight-box p{font-size:14px;color:#3C3489;line-height:1.6}
+.insight-box strong{font-weight:600}
+.lead-capture{margin-top:2rem;background:#EEEDFE;border:1px solid #AFA9EC;border-radius:var(--border-radius-lg);padding:1.5rem;text-align:center}
+.lead-capture h3{font-size:16px;font-weight:600;color:#3C3489;margin-bottom:6px}
+.lead-capture p{font-size:13px;color:#3C3489;margin-bottom:1rem}
+.lead-fields{display:flex;flex-direction:column;gap:8px;margin-bottom:.75rem}
+.lead-fields input{font-size:14px;border:1px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:9px 12px;font-family:inherit}
+.btn-lead{display:inline-block;width:100%;background:#7e14ff;color:#fff;border:none;border-radius:var(--border-radius-md);padding:11px 26px;font-size:14px;font-weight:600;cursor:pointer}
+.btn-lead:hover{background:#6710d1}
+.btn-lead:disabled{opacity:.6;cursor:default}
+#lead-status{margin-top:.5rem;font-size:13px;color:#3C3489}
+.cta-area{margin-top:2rem;background:#E1F5EE;border:1px solid #5DCAA5;border-radius:var(--border-radius-lg);padding:1.5rem;text-align:center}
+.cta-area h3{font-size:17px;font-weight:600;color:#085041;margin-bottom:6px}
+.cta-area p{font-size:13px;color:#0F6E56;margin-bottom:1rem}
+.btn-cta{display:inline-block;background:#1D9E75;color:#fff;border:none;border-radius:var(--border-radius-md);padding:11px 26px;font-size:14px;font-weight:600;cursor:pointer;text-decoration:none}
+.btn-cta:hover{background:#0F6E56}
+.progress-bar{height:4px;background:var(--color-background-secondary);border-radius:99px;margin-bottom:2rem;overflow:hidden}
+.progress-fill{height:100%;background:#1D9E75;border-radius:99px;transition:width .3s}
+
+@media (max-width:560px){
+  .page{padding:1.5rem .75rem 3rem}
+  .wrap{padding:1.25rem}
+  .header h2{font-size:18px}
+  .grid-2{grid-template-columns:1fr}
+  .score-grid{grid-template-columns:1fr 1fr}
+  .score-card .score-val{font-size:22px}
+  .cta-area{padding:1.25rem}
+  .radio-pill label{padding:8px 12px;font-size:13px}
+}
+</style>
+</head>
+<body>
+<div class="page">
+  <p class="brand">✦ Éclat Loyalty</p>
+  <div class="wrap">
+
+    <div class="header">
+      <h2>My customer loyalty plan</h2>
+      <p>Fill out this template to discover your business's loyalty potential and what you're losing every month.</p>
+    </div>
+
+    <div class="progress-bar"><div class="progress-fill" id="progress" style="width:0%"></div></div>
+
+    <div class="section">
+      <div class="section-title">1. Your business</div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Business type <span>*</span></label>
+          <select id="type_commerce" onchange="update()">
+            <option value="">-- Choose --</option>
+            <option>Beauty salon / Nail tech</option>
+            <option>Hair salon</option>
+            <option>Bakery / pastry shop</option>
+            <option>Fashion / accessories shop</option>
+            <option>Restaurant / café</option>
+            <option>Wellness / spa</option>
+            <option>Other local business</option>
+          </select>
+          <input type="text" id="type_commerce_autre" placeholder="What's your business?" style="display:none;margin-top:8px" oninput="update()">
+        </div>
+        <div class="field">
+          <label>Customers per month <span>*</span></label>
+          <input type="number" id="clients_mois" placeholder="e.g. 80" min="1" oninput="update()">
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Average ticket (€) <span>*</span></label>
+          <input type="number" id="panier" placeholder="e.g. 45" min="1" oninput="update()">
+        </div>
+        <div class="field">
+          <label>Estimated return frequency</label>
+          <select id="freq" onchange="update()">
+            <option value="">-- Choose --</option>
+            <option value="2">Once every 2 months</option>
+            <option value="1.5">Once every month and a half</option>
+            <option value="1">Once a month</option>
+            <option value="0.5">Twice a month</option>
+            <option value="autre">Other</option>
+          </select>
+          <input type="number" id="freq_autre" placeholder="How many times per month? e.g. 3" min="0.1" step="0.5" style="display:none;margin-top:8px" oninput="update()">
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">2. Your current situation</div>
+      <div class="field">
+        <label>Do you have a loyalty program today?</label>
+        <div class="radio-group">
+          <div class="radio-pill"><input type="radio" name="fidelite" id="f1" value="non" onchange="update()"><label for="f1">No, none</label></div>
+          <div class="radio-pill"><input type="radio" name="fidelite" id="f2" value="carte_papier" onchange="update()"><label for="f2">Paper stamp card</label></div>
+          <div class="radio-pill"><input type="radio" name="fidelite" id="f3" value="logiciel" onchange="update()"><label for="f3">Existing software/app</label></div>
+          <div class="radio-pill"><input type="radio" name="fidelite" id="f4" value="autre" onchange="update()"><label for="f4">Other system</label></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Do you know the % of customers who return? <span>(estimate)</span></label>
+        <div class="radio-group">
+          <div class="radio-pill"><input type="radio" name="retention" id="r1" value="20" onchange="update()"><label for="r1">Less than 20%</label></div>
+          <div class="radio-pill"><input type="radio" name="retention" id="r2" value="35" onchange="update()"><label for="r2">20–40%</label></div>
+          <div class="radio-pill"><input type="radio" name="retention" id="r3" value="55" onchange="update()"><label for="r3">40–60%</label></div>
+          <div class="radio-pill"><input type="radio" name="retention" id="r4" value="70" onchange="update()"><label for="r4">More than 60%</label></div>
+        </div>
+      </div>
+      <div class="field">
+        <label>Main obstacle to retaining your customers <span>(optional)</span></label>
+        <textarea id="obstacle" placeholder="E.g.: customers forget to come back, I don't have time to follow up with them, I don't know who my best customers are..." oninput="update()"></textarea>
+      </div>
+    </div>
+
+    <div class="section" id="results-section" style="display:none">
+      <div class="section-title">3. Your loyalty potential</div>
+      <div class="score-grid">
+        <div class="score-card">
+          <div class="score-val" id="ca-actuel">–</div>
+          <div class="score-label">Current monthly revenue</div>
+          <div class="score-sub">estimated</div>
+        </div>
+        <div class="score-card">
+          <div class="score-val" id="clients-perdus">–</div>
+          <div class="score-label">Customers lost/month</div>
+          <div class="score-sub">who don't return</div>
+        </div>
+        <div class="score-card">
+          <div class="score-val" id="manque-a-gagner">–</div>
+          <div class="score-label">Lost revenue</div>
+          <div class="score-sub">per month</div>
+        </div>
+        <div class="score-card">
+          <div class="score-val" id="gain-potentiel">–</div>
+          <div class="score-label">Potential gain</div>
+          <div class="score-sub">with +20% retention</div>
+        </div>
+      </div>
+      <div class="insight-box" id="insight-box">
+        <p id="insight-text"></p>
+      </div>
+    </div>
+
+    <div class="lead-capture" id="lead-capture-area" style="display:none">
+      <h3>Get your detailed diagnosis</h3>
+      <p>We'll send you a copy of these results by email, with personalized advice for your business.</p>
+      <div class="lead-fields">
+        <input type="text" id="lead-firstname" placeholder="First name">
+        <input type="text" id="lead-lastname" placeholder="Last name">
+        <input type="email" id="lead-email" placeholder="your@email.com" required>
+        <input type="tel" id="lead-phone" placeholder="Phone (optional)">
+      </div>
+      <button class="btn-lead" id="lead-submit" onclick="submitLead()">Get my diagnosis</button>
+      <p id="lead-status"></p>
+    </div>
+
+    <div class="cta-area" id="cta-area" style="display:none">
+      <h3>You don't have to handle this alone</h3>
+      <p>Bringing your customers back is exactly what Éclat Loyalty was designed for. Take 14 days to try it out calmly: it's free, with no commitment, and you'll see for yourself if it makes your daily life easier.</p>
+      <a class="btn-cta" id="cta-link" href="https://xn--clatdigital-99a.fr/">See how it can help me →</a>
+    </div>
+  </div>
+</div>
+
+<script>
+function fmt(n){return new Intl.NumberFormat('en-US',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(n)}
+let lastResults=null;
+function update(){
+  const clients=parseInt(document.getElementById('clients_mois').value)||0;
+  const panier=parseInt(document.getElementById('panier').value)||0;
+
+  const typeEl=document.getElementById('type_commerce');
+  const typeAutreEl=document.getElementById('type_commerce_autre');
+  typeAutreEl.style.display=typeEl.value==='Other local business'?'block':'none';
+
+  // "Other": number of visits per month, converted to the interval
+  // between two visits (same unit as the select presets)
+  const freqEl=document.getElementById('freq');
+  const freqAutreEl=document.getElementById('freq_autre');
+  freqAutreEl.style.display=freqEl.value==='autre'?'block':'none';
+  let freq=1;
+  if(freqEl.value==='autre'){
+    const visites=parseFloat(String(freqAutreEl.value).replace(',','.'));
+    freq=visites>0?1/visites:1;
+  }else if(freqEl.value){
+    freq=parseFloat(freqEl.value);
+  }
+
+  const retEl=document.querySelector('input[name="retention"]:checked');
+  const ret=retEl?parseInt(retEl.value):null;
+
+  let filled=0;
+  if(document.getElementById('type_commerce').value)filled+=20;
+  if(clients>0)filled+=20;
+  if(panier>0)filled+=20;
+  if(retEl)filled+=20;
+  if(document.querySelector('input[name="fidelite"]:checked'))filled+=20;
+  document.getElementById('progress').style.width=filled+'%';
+
+  if(clients>0&&panier>0&&ret!==null){
+    const caActuel=clients*panier;
+    const clientsFideles=Math.round(clients*(ret/100));
+    const clientsPerdus=clients-clientsFideles;
+    const manque=Math.round(clientsPerdus*panier*freq);
+    const gainPotentiel=Math.round(clients*0.2*panier*freq);
+
+    document.getElementById('ca-actuel').textContent=fmt(caActuel);
+    document.getElementById('clients-perdus').textContent=clientsPerdus;
+    document.getElementById('manque-a-gagner').textContent=fmt(manque);
+    document.getElementById('gain-potentiel').textContent=fmt(gainPotentiel);
+
+    let insight='';
+    if(ret<=20){
+      insight=`<strong>Critical situation:</strong> you're losing ${clientsPerdus} customers every month. With such a low retention rate, every new customer is expensive to acquire. A well-structured loyalty program can double your return rate in 3 months.`;
+    }else if(ret<=35){
+      insight=`<strong>Significant room for improvement:</strong> ${clientsPerdus} customers don't come back every month, that's ${fmt(manque)} in revenue you'll never make. The good news: with the right tools, reaching 50% retention is entirely realistic.`;
+    }else if(ret<=55){
+      insight=`<strong>Solid base, but still ${clientsPerdus} customers lost per month.</strong> You're above average, but ${fmt(manque)}/month is still being left on the table. An automated digital program can turn these missed opportunities into recurring appointments.`;
+    }else{
+      insight=`<strong>You're already retaining well!</strong> But even at this level, ${clientsPerdus} customers leave every month. Automating and digitizing this process will let you earn ${fmt(gainPotentiel)} more without any extra effort.`;
+    }
+    document.getElementById('insight-text').innerHTML=insight;
+    document.getElementById('results-section').style.display='block';
+    document.getElementById('lead-capture-area').style.display='block';
+    document.getElementById('cta-area').style.display='block';
+
+    lastResults={
+      ca_actuel:caActuel,
+      clients_perdus:clientsPerdus,
+      manque_a_gagner:manque,
+      gain_potentiel:gainPotentiel,
+      retention_pct:ret
+    };
+  }else{
+    document.getElementById('results-section').style.display='none';
+    document.getElementById('lead-capture-area').style.display='none';
+    document.getElementById('cta-area').style.display='none';
+    lastResults=null;
+  }
+}
+
+const API_URL='https://api.xn--clatdigital-99a.fr/api/leads';
+
+function submitLead(){
+  const firstName=document.getElementById('lead-firstname').value.trim();
+  const lastName=document.getElementById('lead-lastname').value.trim();
+  const email=document.getElementById('lead-email').value.trim();
+  const phone=document.getElementById('lead-phone').value.trim();
+  const statusEl=document.getElementById('lead-status');
+  const btn=document.getElementById('lead-submit');
+
+  if(!email||!email.includes('@')){
+    statusEl.textContent='Please enter a valid email.';
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent='Sending...';
+  statusEl.textContent='';
+
+  fetch(API_URL,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      first_name:firstName,
+      last_name:lastName,
+      email,
+      phone,
+      business_type:(function(){
+        const t=document.getElementById('type_commerce').value;
+        const a=document.getElementById('type_commerce_autre').value.trim();
+        return t==='Other local business'&&a?'Other: '+a:t;
+      })(),
+      source:'lead-magnet-diagnostic-en',
+      results:lastResults
+    })
+  })
+    .then(r=>{
+      if(!r.ok) throw new Error();
+      statusEl.textContent="Thank you! You'll receive your diagnosis by email.";
+      btn.textContent='Sent ✓';
+    })
+    .catch(()=>{
+      statusEl.textContent='There was an error sending, please try again in a moment.';
+      btn.disabled=false;
+      btn.textContent='Get my diagnosis';
+    });
+}
+</script>
+
+</body>
+</html>
